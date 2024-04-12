@@ -7,3 +7,9 @@ export const ResponseCode = {
     AUTH_ERROR: 401,
     NOT_FOUND_ERROR: 404
 }
+
+export const ResponseMessage = {
+    SERVER_ERROR: "Server Errror..!",
+    VALIDATION_ERROR: "Invalid Data..!",
+    NOT_FOUND_ERROR: "Data Not Found..!"
+}

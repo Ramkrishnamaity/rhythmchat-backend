@@ -1,8 +1,11 @@
 export type UserProfileType = {
-    email: string
+    userName: string
+    bio: string
     firstName: string
     lastName: string
-    image: string
-    age: number,
-    _id: string
+    email?: string
+    image?: string
+    phoneNumber: string
+    createdOn?: Date
+    updatedOn?: Date
 }

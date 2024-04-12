@@ -1,8 +1,9 @@
 export type Res<T = Record<string, any>> = {
     status: boolean
-    data?: T
     message: string
+    data?: T
     error?: any
+    totalPage?: number
 }
 
 export type ReqWithAuth<T = Record<string, any>> = T & {
@@ -10,8 +11,13 @@ export type ReqWithAuth<T = Record<string, any>> = T & {
     email: string
 }
 
+
 declare module "express" {
     interface Request {
         User?: ReqWithAuth;
     }
+}
+
+export type CommonParamsType = {
+    id: string
 }
