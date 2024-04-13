@@ -1,8 +1,10 @@
 import { Router } from "express"
-import UserController from "../controllers/user"
+import UserProfileController from "../controllers/user/Profile"
 
 const UserRouter: Router = Router()
 
-UserRouter.get("/profile", UserController.getUserProfile)
+
+UserRouter.get("/profile/:id", UserProfileController.getUserProfile)
+
 
 export default UserRouter

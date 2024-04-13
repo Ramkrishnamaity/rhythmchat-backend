@@ -1,85 +1,80 @@
 import { Request, Response } from "express"
-import { UserLoginRequest, UserRegisterRequest } from "../../lib/types/Requests/Auth/User"
-import { UserLoginResponse, UserRegisterResponse } from "../../lib/types/Responses/Auth/User"
+import { CommonParamsType, Res } from "../../lib/types/Common"
+import { ResponseCode, ResponseMessage } from "../../lib/utils/ResponseCode"
+import { UserRegisterRequest } from "../../lib/types/Requests/Auth/User"
+import { InputValidator } from "../../lib/utils/ErrorHandler"
 import UserModel from "../../models/User"
-import { UserModelType } from "../../lib/types/Models/User"
-import passwordHash from "password-hash"
-import mongoose, { Document } from "mongoose"
-import jwt from "jsonwebtoken"
-import { InputValidator, dbError } from "../../lib/utils/ErrorHandler"
-import { Res } from "../../lib/types/Common"
-import { ResponseCode } from "../../lib/utils/ResponseCode"
+import { UserLoginResponse, UserRegisterResponse } from "../../lib/types/Responses/Auth/User"
 
 
-const createToken = (data: Record<string, any>): string => {
-	return jwt.sign(data, process.env.JWT_SECRET ?? "")
-}
 
-const login = (req: Request<any, any, UserLoginRequest>, res: Response<Res<UserLoginResponse>>): void => {
-	const { email, password } = req.body
+const login = async (req: Request<CommonParamsType>, res: Response<Res<UserLoginResponse>>): Promise<void> => {
+	try {
 
-	UserModel.findOne({ email })
-		.then((result) => {
-			if (result && result.comparePassword && result.comparePassword(password)) {
-				const response: Res<UserLoginResponse> = {
-					data: {
-						token: result.token
-					},
-					status: true,
-					message: "Success"
-				}
-				res.status(ResponseCode.SUCCESS).json(response)
-			} else {
-				res.status(ResponseCode.NOT_FOUND_ERROR).json({
-					status: false,
-					message: "No admin found"
-				})
+		const user = await UserModel.findById(req.params.id)
+
+		user? 
+		res.status(ResponseCode.SUCCESS).json({
+			status: true,
+			message: "User Logged in Successfully",
+			data: {
+				_id: user._id,
+				token: ""
 			}
+		}): 
+		res.status(ResponseCode.NOT_FOUND_ERROR).json({
+			status: false,
+			message: ResponseMessage.NOT_FOUND_ERROR
 		})
-		.catch((error) => {
-			dbError(error, res)
+
+	} catch (error) {
+		res.status(ResponseCode.SERVER_ERROR).json({
+			status: false,
+			message: ResponseMessage.SERVER_ERROR,
+			error
 		})
+	}
 }
 
 const register = (req: Request<any, any, UserRegisterRequest>, res: Response<Res<UserRegisterResponse>>): void => {
-	InputValidator(req.body, {
-		email: "required|email",
-		password: "required|minLength:6",
-		firstName: "required",
-		lastName: "required",
-		age: "required"
-	})
-		.then(() => {
-			const _id = new mongoose.Types.ObjectId()
-			const userData: UserModelType<Document["_id"]> = {
-				...req.body,
-				password: passwordHash.generate(req.body.password, { saltLength: 10 }),
-				token: createToken({ _id, email: req.body.email }),
-				_id
-			}
-			const userModel = new UserModel(userData)
+	try {
 
-			userModel.save()
-				.then(() => {
-					const response: Res<UserRegisterResponse> = {
-						data: {
-							token: userData.token
-						},
-						status: true,
-						message: "Success"
-					}
-					res.status(ResponseCode.SUCCESS).json(response)
-				})
-				.catch((error) => {
-					dbError(error, res)
-				})
+		InputValidator(req.body, {
+			userName: "required",
+			bio: "required",
+			firstName: "required",
+			lastName: "required",
+			phoneNumber: "required"
 		})
-		.catch((error) => {
+		.then(async () => {
+
+			const user = await UserModel.create({...req.body})
+
+			res.status(ResponseCode.SUCCESS).json({
+				status: true,
+				message: "User Registered Successfully",
+				data: {
+					_id: user._id,
+					token: ""
+				}
+			})
+
+		})
+		.catch(error => {
 			res.status(ResponseCode.VALIDATION_ERROR).json({
 				status: false,
-				message: error
+				message: ResponseMessage.VALIDATION_ERROR,
+				error
 			})
 		})
+
+	} catch (error) {
+		res.status(ResponseCode.SERVER_ERROR).json({
+			status: false,
+			message: ResponseMessage.SERVER_ERROR,
+			error
+		})
+	}
 }
 
 const UserAuthController = {

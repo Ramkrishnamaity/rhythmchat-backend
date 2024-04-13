@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 
 export const connectDB = (): void => {
-	const mongoURI: string = process.env.MONGODB_URI ?? "mongodb://localhost:27017/mydatabase"
+	const mongoURI: string = process.env.MONGODB_URI ?? "mongodb://localhost:27017/rhythmchat"
 
 	mongoose.connect(mongoURI)
 		.then(() => {

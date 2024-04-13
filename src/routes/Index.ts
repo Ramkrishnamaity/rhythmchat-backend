@@ -3,13 +3,13 @@ import UserAuthController from "../controllers/auth/User"
 import { middleware } from "../lib/utils/Middleware"
 import UserRouter from "./User"
 
-const Route: Router = Router()
+const ApiRoute: Router = Router()
 
-Route.post("/user/login", UserAuthController.login)
-Route.post("/user/register", UserAuthController.register)
+ApiRoute.post("/user/login/:id", UserAuthController.login)
+ApiRoute.post("/user/register", UserAuthController.register)
 
-Route.use(middleware)
+ApiRoute.use(middleware)
 
-Route.use("/user", UserRouter)
+ApiRoute.use("/user", UserRouter)
 
-export default Route
+export default ApiRoute

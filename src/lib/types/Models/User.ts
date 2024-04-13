@@ -1,16 +1,11 @@
-export type CommonModelType = {
-    createdOn?: Date
-    updatedOn?: Date
-    isDeleted?: boolean
-}
+
 
 export type UserModelType<T> = T & {
+    userName: string
+    bio: string
     firstName: string
     lastName: string
-    email: string
-    password: string
-    token: string
-    image?: string
-    age: number,
-    comparePassword?(candidatePassword: string): boolean
+    email?: string
+    image: string
+    phoneNumber: string
 }

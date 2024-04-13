@@ -1,8 +1,9 @@
 import express, { Application } from "express"
 import { configDotenv } from "dotenv"
 import { connectDB } from "./lib/utils/Connection"
-import Route from "./routes/Index"
+import rootRoute from "./routes/Index"
 import logger from "morgan"
+import path from "path"
 
 configDotenv()
 
@@ -14,7 +15,8 @@ connectDB()
 app.use(logger("dev"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use("/api/v1", Route)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use("/api/v1", rootRoute)
 
 app.listen(port, () => {
 	console.log(`Server is running on port http://127.0.0.1:${port}`)

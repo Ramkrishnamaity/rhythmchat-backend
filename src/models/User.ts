@@ -1,40 +1,53 @@
 import mongoose, { Document, Schema } from "mongoose"
-import type { CommonModelType, UserModelType } from "../lib/types/Models/User"
-import passwordHash from "password-hash"
+import { UserModelType } from "../lib/types/Models/User"
+import { CommonModelType } from "../lib/types/Models"
 
 const UserSchema = new Schema<UserModelType<CommonModelType & Document>>({
+	userName: {
+		type: String,
+		required: [true, "Username is required."],
+		unique: true
+	},
+	bio: {
+		type: String,
+		required: [true, "Bio is required."]
+	},
 	firstName: {
 		type: String,
-		required: true,
-		unique: true
+		required: [true, "FirstName is required."],
 	},
 	lastName: {
 		type: String,
-		required: true
+		required: [true, "LastName is required."],
 	},
 	email: {
 		type: String,
-		required: true
+		unique: true
 	},
-	password: String,
+	phoneNumber: {
+		type: String,
+		required: [true, "Phone Number is required."],
+		unique: true
+	},
 	image: {
 		type: String,
-		default: "https://e7.pngegg.com/pngimages/867/694/png-clipart-user-profile-default-computer-icons-network-video-recorder-avatar-cartoon-maker-blue-text.png"
+		default: "/uploads/profile.png"
 	},
-	token: String,
 	createdOn: {
 		type: Date,
-		default: new Date()
+		default: Date.now
 	},
 	updatedOn: {
 		type: Date,
-		default: new Date()
+		default: Date.now
+	},
+	isDeleted: {
+		type: Boolean,
+		default: false
 	}
 })
 
-UserSchema.methods.comparePassword = function (candidatePassword: string): boolean {
-	return passwordHash.verify(candidatePassword, this.password)
-}
 
 const UserModel = mongoose.model<UserModelType<CommonModelType & Document>>("User", UserSchema)
+
 export default UserModel
