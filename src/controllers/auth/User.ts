@@ -4,69 +4,45 @@ import { ResponseCode, ResponseMessage } from "../../lib/utils/ResponseCode"
 import { UserRegisterRequest } from "../../lib/types/Requests/Auth/User"
 import { InputValidator } from "../../lib/utils/ErrorHandler"
 import UserModel from "../../models/User"
-import { UserLoginResponse, UserRegisterResponse } from "../../lib/types/Responses/Auth/User"
+import { UserLoginResponse } from "../../lib/types/Responses/Auth/User"
+import CommonUtilitys from "../../lib/utils/Common"
 
 
 
 const login = async (req: Request<CommonParamsType>, res: Response<Res<UserLoginResponse>>): Promise<void> => {
 	try {
 
-		const user = await UserModel.findById(req.params.id)
-
-		user? 
-		res.status(ResponseCode.SUCCESS).json({
-			status: true,
-			message: "User Logged in Successfully",
-			data: {
-				_id: user._id,
-				token: ""
-			}
-		}): 
-		res.status(ResponseCode.NOT_FOUND_ERROR).json({
-			status: false,
-			message: ResponseMessage.NOT_FOUND_ERROR
+		const user = await UserModel.findOne({
+			phoneNumber: req.params.id
 		})
 
-	} catch (error) {
-		res.status(ResponseCode.SERVER_ERROR).json({
-			status: false,
-			message: ResponseMessage.SERVER_ERROR,
-			error
-		})
-	}
-}
-
-const register = (req: Request<any, any, UserRegisterRequest>, res: Response<Res<UserRegisterResponse>>): void => {
-	try {
-
-		InputValidator(req.body, {
-			userName: "required",
-			bio: "required",
-			firstName: "required",
-			lastName: "required",
-			phoneNumber: "required"
-		})
-		.then(async () => {
-
-			const user = await UserModel.create({...req.body})
+		if(user) {
 
 			res.status(ResponseCode.SUCCESS).json({
 				status: true,
-				message: "User Registered Successfully",
+				message: "User Logged in Successfully",
 				data: {
-					_id: user._id,
-					token: ""
+					_id: user._id
 				}
 			})
 
-		})
-		.catch(error => {
-			res.status(ResponseCode.VALIDATION_ERROR).json({
-				status: false,
-				message: ResponseMessage.VALIDATION_ERROR,
-				error
+		} else {
+
+			const userName = await CommonUtilitys.getUsername()
+			const user = await UserModel.create({
+				userName,
+				phoneNumber: req.params.id
 			})
-		})
+
+			res.status(ResponseCode.SUCCESS).json({
+				status: true,
+				message: "User Logged in Successfully",
+				data: {
+					_id: user._id
+				}
+			})
+
+		}
 
 	} catch (error) {
 		res.status(ResponseCode.SERVER_ERROR).json({
@@ -77,9 +53,9 @@ const register = (req: Request<any, any, UserRegisterRequest>, res: Response<Res
 	}
 }
 
+
 const UserAuthController = {
-	login,
-	register
+	login
 }
 
 export default UserAuthController

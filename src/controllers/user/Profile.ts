@@ -3,9 +3,9 @@ import { CommonParamsType, Res } from "../../lib/types/Common"
 import { ResponseCode, ResponseMessage } from "../../lib/utils/ResponseCode"
 import UserModel from "../../models/User"
 import { Types } from "mongoose"
-import { UserProfileType } from "../../lib/types/Responses/User"
+import { ProfileResponceType } from "../../lib/types/Responses/User"
 
-const getUserProfile = async (req: Request<CommonParamsType>, res: Response<Res<UserProfileType>>) => {
+const getUserProfile = async (req: Request<CommonParamsType>, res: Response<Res<ProfileResponceType>>) => {
     try {
 
         const userData = await UserModel.aggregate([
@@ -23,12 +23,12 @@ const getUserProfile = async (req: Request<CommonParamsType>, res: Response<Res<
             }
         ])
 
-        userData.length !== 0?
-        res.status(ResponseCode.SUCCESS).json({
-            status: true,
-            message: "User Profile Fetched Successfully",
-            data: userData[0]
-        }):
+        // userData.length === 0?
+        // res.status(ResponseCode.SUCCESS).json({
+        //     status: true,
+        //     message: "User Profile Fetched Successfully",
+        //     data: userData[0]
+        // }):
         res.status(ResponseCode.NOT_FOUND_ERROR).json({
 			status: false,
 			message: ResponseMessage.NOT_FOUND_ERROR

@@ -1,7 +1,5 @@
 export type UserLoginResponse = {
-    _id: string,
-    token: string
+    _id: string
 }
 
-export type UserRegisterResponse = UserLoginResponse
 
