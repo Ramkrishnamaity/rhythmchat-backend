@@ -4,9 +4,7 @@ import UserRouter from "./User"
 
 const ApiRoute: Router = Router()
 
-ApiRoute.get("/user/login/:id", UserAuthController.login)
-
-// ApiRoute.use(middleware)
+ApiRoute.post("/user/login", UserAuthController.login)
 
 ApiRoute.use("/user", UserRouter)
 

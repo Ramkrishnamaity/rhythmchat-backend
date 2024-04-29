@@ -12,14 +12,15 @@ const UserSchema = new Schema<UserModelType<CommonModelType & Document>>({
 		type: String
 	},
 	firstName: {
-		type: String
+		type: String,
+		default: "Hello"
 	},
 	lastName: {
-		type: String
+		type: String,
+		default: "World"
 	},
 	email: {
-		type: String,
-		unique: true
+		type: String
 	},
 	phoneNumber: {
 		type: String,

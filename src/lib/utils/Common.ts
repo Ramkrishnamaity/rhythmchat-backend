@@ -2,6 +2,9 @@ import { generateUsername } from "unique-username-generator"
 import UserModel from "../../models/User"
 import { UserModelType } from "../types/Models/User"
 import { Document } from "mongoose"
+import jwt from "jsonwebtoken"
+import { configDotenv } from "dotenv"
+configDotenv()
 
 const getUsername = async (): Promise<string> => {
     try {
@@ -25,9 +28,14 @@ const getUsername = async (): Promise<string> => {
     }
 }
 
+const getNewToken = (_id: string): string => {
+    return jwt.sign({userId: _id}, process.env.JWT_SECRET ?? "", {expiresIn: "7d"})
+}
+
 
 const CommonUtilitys = {
-    getUsername
+    getUsername,
+    getNewToken
 }
 
 export default CommonUtilitys 

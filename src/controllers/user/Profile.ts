@@ -23,12 +23,12 @@ const getUserProfile = async (req: Request<CommonParamsType>, res: Response<Res<
             }
         ])
 
-        // userData.length === 0?
-        // res.status(ResponseCode.SUCCESS).json({
-        //     status: true,
-        //     message: "User Profile Fetched Successfully",
-        //     data: userData[0]
-        // }):
+        userData.length !== 0?
+        res.status(ResponseCode.SUCCESS).json({
+            status: true,
+            message: "User Profile Fetched Successfully",
+            data: userData[0]
+        }):
         res.status(ResponseCode.NOT_FOUND_ERROR).json({
 			status: false,
 			message: ResponseMessage.NOT_FOUND_ERROR
