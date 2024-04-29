@@ -9,20 +9,18 @@ const UserSchema = new Schema<UserModelType<CommonModelType & Document>>({
 		unique: true
 	},
 	bio: {
-		type: String,
-		required: [true, "Bio is required."]
+		type: String
 	},
 	firstName: {
 		type: String,
-		required: [true, "FirstName is required."],
+		default: "Hello"
 	},
 	lastName: {
 		type: String,
-		required: [true, "LastName is required."],
+		default: "World"
 	},
 	email: {
-		type: String,
-		unique: true
+		type: String
 	},
 	phoneNumber: {
 		type: String,

@@ -1,73 +1,73 @@
 import { Request, Response } from "express"
 import { CommonParamsType, Res } from "../../lib/types/Common"
 import { ResponseCode, ResponseMessage } from "../../lib/utils/ResponseCode"
-import { UserRegisterRequest } from "../../lib/types/Requests/Auth/User"
+import { LoginRequestType } from "../../lib/types/Requests/Auth/User"
 import { InputValidator } from "../../lib/utils/ErrorHandler"
 import UserModel from "../../models/User"
-import { UserLoginResponse, UserRegisterResponse } from "../../lib/types/Responses/Auth/User"
+import { UserLoginResponse } from "../../lib/types/Responses/Auth/User"
+import CommonUtilitys from "../../lib/utils/Common"
 
 
 
-const login = async (req: Request<CommonParamsType>, res: Response<Res<UserLoginResponse>>): Promise<void> => {
+const login = (req: Request<any, any, LoginRequestType>, res: Response<Res<UserLoginResponse>>): void => {
 	try {
-
-		const user = await UserModel.findById(req.params.id)
-
-		user? 
-		res.status(ResponseCode.SUCCESS).json({
-			status: true,
-			message: "User Logged in Successfully",
-			data: {
-				_id: user._id,
-				token: ""
-			}
-		}): 
-		res.status(ResponseCode.NOT_FOUND_ERROR).json({
-			status: false,
-			message: ResponseMessage.NOT_FOUND_ERROR
-		})
-
-	} catch (error) {
-		res.status(ResponseCode.SERVER_ERROR).json({
-			status: false,
-			message: ResponseMessage.SERVER_ERROR,
-			error
-		})
-	}
-}
-
-const register = (req: Request<any, any, UserRegisterRequest>, res: Response<Res<UserRegisterResponse>>): void => {
-	try {
-
 		InputValidator(req.body, {
-			userName: "required",
-			bio: "required",
-			firstName: "required",
-			lastName: "required",
 			phoneNumber: "required"
-		})
-		.then(async () => {
+		}).then(async () => {
 
-			const user = await UserModel.create({...req.body})
-
-			res.status(ResponseCode.SUCCESS).json({
-				status: true,
-				message: "User Registered Successfully",
-				data: {
-					_id: user._id,
-					token: ""
-				}
+			const user = await UserModel.findOne({
+				phoneNumber: req.body.phoneNumber
 			})
 
-		})
-		.catch(error => {
+			if (user) {
+
+				const token = CommonUtilitys.getNewToken(user._id)
+				res.cookie("token", token, {
+					httpOnly: true,
+					sameSite: "strict",
+					secure: true
+				})
+
+				res.status(ResponseCode.SUCCESS).json({
+					status: true,
+					message: "User Logged in Successfully",
+					data: {
+						_id: user._id,
+						isNew: false,
+						token
+					}
+				})
+
+			} else {
+
+				const userName = await CommonUtilitys.getUsername()
+				const user = await UserModel.create({
+					userName,
+					phoneNumber: req.body.phoneNumber
+				})
+
+				const token = CommonUtilitys.getNewToken(user._id)
+				res.setHeader('Set-Cookie', `token=${token}; HttpOnly; SameSite=Strict; Secure`);
+
+				res.status(ResponseCode.SUCCESS).json({
+					status: true,
+					message: "User Logged in Successfully",
+					data: {
+						_id: user._id,
+						isNew: true,
+						token
+					}
+				})
+
+			}
+
+		}).catch(error => {
 			res.status(ResponseCode.VALIDATION_ERROR).json({
 				status: false,
 				message: ResponseMessage.VALIDATION_ERROR,
 				error
 			})
 		})
-
 	} catch (error) {
 		res.status(ResponseCode.SERVER_ERROR).json({
 			status: false,
@@ -77,9 +77,9 @@ const register = (req: Request<any, any, UserRegisterRequest>, res: Response<Res
 	}
 }
 
+
 const UserAuthController = {
-	login,
-	register
+	login
 }
 
 export default UserAuthController

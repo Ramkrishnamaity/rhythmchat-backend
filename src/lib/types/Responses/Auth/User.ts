@@ -1,7 +1,7 @@
 export type UserLoginResponse = {
-    _id: string,
+    _id: string
+    isNew: boolean,
     token: string
 }
 
-export type UserRegisterResponse = UserLoginResponse
 

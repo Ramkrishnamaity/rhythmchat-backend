@@ -3,9 +3,9 @@ import { CommonParamsType, Res } from "../../lib/types/Common"
 import { ResponseCode, ResponseMessage } from "../../lib/utils/ResponseCode"
 import UserModel from "../../models/User"
 import { Types } from "mongoose"
-import { UserProfileType } from "../../lib/types/Responses/User"
+import { ProfileResponceType } from "../../lib/types/Responses/User"
 
-const getUserProfile = async (req: Request<CommonParamsType>, res: Response<Res<UserProfileType>>) => {
+const getUserProfile = async (req: Request<CommonParamsType>, res: Response<Res<ProfileResponceType>>) => {
     try {
 
         const userData = await UserModel.aggregate([
