@@ -1,17 +1,17 @@
 import { Request, Response } from "express"
-import { CommonParamsType, Res } from "../../lib/types/Common"
+import { Res } from "../../lib/types/Common"
 import { ResponseCode, ResponseMessage } from "../../lib/utils/ResponseCode"
 import UserModel from "../../models/User"
 import { Types } from "mongoose"
 import { ProfileResponceType } from "../../lib/types/Responses/User"
 
-const getUserProfile = async (req: Request<CommonParamsType>, res: Response<Res<ProfileResponceType>>) => {
+const getUserProfile = async (req: Request, res: Response<Res<ProfileResponceType>>) => {
     try {
 
         const userData = await UserModel.aggregate([
             {
                 $match: {
-                    _id: new Types.ObjectId(req.params.id)
+                    _id: new Types.ObjectId(req.User?._id)
                 }
             },
             {

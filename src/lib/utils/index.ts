@@ -1,4 +1,5 @@
 import { Validator } from "node-input-validator"
+import { transporter } from "./Connection"
 
 
 export const InputValidator = async (input: object, rules: object): Promise<void> => {
@@ -20,4 +21,19 @@ export const InputValidator = async (input: object, rules: object): Promise<void
 
 
 	})
+}
+
+export const MailSender = async (email: string, title: string, body: string): Promise<boolean> => {
+	try{
+        await transporter.sendMail({
+            from: "RhythmChat ORG.",
+            to: `${email}`,
+            subject: `${title}`,
+            html: `${body}`     
+        })
+		return true
+    } catch(error){
+		console.log("Error in Mail Send: ", error)
+        return false
+    }
 }

@@ -7,6 +7,8 @@ const ApiRoute: Router = Router()
 
 ApiRoute.post("/user/login", UserAuthController.login)
 ApiRoute.post("/user/register", UserAuthController.register)
+ApiRoute.post("/user/otp", UserAuthController.sendOtp)
+
 
 ApiRoute.use(middleware)
 

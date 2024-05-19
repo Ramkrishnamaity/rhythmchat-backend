@@ -7,9 +7,14 @@ export type RegisterRequestType = {
     email: string
     password: string
     image?: string
+    otp: string
 }
 
 export type LoginRequestType = {
     email: string
     password: string
+}
+
+export type OtpRequestType = {
+    email: string
 }
