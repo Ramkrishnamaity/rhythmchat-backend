@@ -4,7 +4,6 @@ import rootRoute from "./routes/Index"
 import logger from "morgan"
 import path from "path"
 import cors from "cors"
-import cookieParser from "cookie-parser"
 
 
 const app: Application = express()
@@ -17,7 +16,6 @@ app.use(cors({
 	origin: "http://localhost:3000",
 	credentials: true
 }))
-app.use(cookieParser())
 app.use(logger("dev"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))

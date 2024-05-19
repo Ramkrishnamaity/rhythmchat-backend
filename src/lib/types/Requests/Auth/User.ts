@@ -1,7 +1,7 @@
 
 
 export type RegisterRequestType = {
-    bio: string
+    about: string
     firstName: string
     lastName: string
     email: string

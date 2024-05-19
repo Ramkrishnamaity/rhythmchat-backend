@@ -82,7 +82,7 @@ const register = (req: Request<any, any, RegisterRequestType>, res: Response<Res
 		InputValidator(req.body, {
 			email: "required",
 			password: "required",
-			bio: "required",
+			about: "required",
 			firstName: "required",
 			lastName: "required"
 		})

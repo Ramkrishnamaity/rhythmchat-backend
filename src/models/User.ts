@@ -3,16 +3,17 @@ import { UserModelType } from "../lib/types/Models/User"
 import { CommonModelType } from "../lib/types/Models"
 
 const UserSchema = new Schema<UserModelType<CommonModelType & Document>>({
-	bio: {
-		type: String
+	about: {
+		type: String,
+		required: [true, "About is Required."]
 	},
 	firstName: {
 		type: String,
-		default: "Hello"
+		required: [true, "First Name is Required."]
 	},
 	lastName: {
 		type: String,
-		default: "World"
+		required: [true, "Last Name is Required."]
 	},
 	email: {
 		type: String,
@@ -25,7 +26,7 @@ const UserSchema = new Schema<UserModelType<CommonModelType & Document>>({
 	},
 	image: {
 		type: String,
-		default: "/uploads/profile.png"
+		default: "http://127.0.0.1:4050/api/v1/uploads/profile.png"
 	},
 	createdOn: {
 		type: Date,
