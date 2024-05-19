@@ -140,6 +140,7 @@ const register = (req: Request<any, any, RegisterRequestType>, res: Response<Res
 	}
 }
 
+
 const UserAuthController = {
 	login,
 	register

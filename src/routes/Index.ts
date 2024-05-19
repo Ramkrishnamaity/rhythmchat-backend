@@ -1,7 +1,7 @@
 import { Router } from "express"
 import UserAuthController from "../controllers/auth/User"
-import { middleware } from "../lib/utils/Middleware"
 import UserRouter from "./User"
+import { middleware } from "../lib/utils/Middleware"
 
 const ApiRoute: Router = Router()
 

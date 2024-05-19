@@ -4,16 +4,15 @@ import { CommonModelType } from "../lib/types/Models"
 
 const UserSchema = new Schema<UserModelType<CommonModelType & Document>>({
 	bio: {
-		type: String,
-		required: [true, "Bio is required."]
+		type: String
 	},
 	firstName: {
 		type: String,
-		required: [true, "FirstName is required."],
+		default: "Hello"
 	},
 	lastName: {
 		type: String,
-		required: [true, "LastName is required."],
+		default: "World"
 	},
 	email: {
 		type: String,

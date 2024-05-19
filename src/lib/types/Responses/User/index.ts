@@ -1,11 +1,10 @@
-export type UserProfileType = {
+export type ProfileResponceType = {
     userName: string
-    bio: string
-    firstName: string
-    lastName: string
+    bio?: string
+    firstName?: string
+    lastName?: string
     email?: string
-    image?: string
-    phoneNumber: string
-    createdOn?: Date
+    image: string
+    phoneNumber?: string
     updatedOn?: Date
 }
