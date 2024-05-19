@@ -16,6 +16,7 @@ const getUserProfile = async (req: Request<CommonParamsType>, res: Response<Res<
             },
             {
                 $project: {
+                    password: 0,
                     createdOn: 0,
                     isDeleted: 0,
                     __v: 0

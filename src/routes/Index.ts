@@ -5,7 +5,7 @@ import UserRouter from "./User"
 
 const ApiRoute: Router = Router()
 
-ApiRoute.post("/user/login/:id", UserAuthController.login)
+ApiRoute.post("/user/login", UserAuthController.login)
 ApiRoute.post("/user/register", UserAuthController.register)
 
 ApiRoute.use(middleware)

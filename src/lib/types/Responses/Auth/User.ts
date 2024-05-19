@@ -1,5 +1,4 @@
 export type UserLoginResponse = {
-    _id: string,
     token: string
 }
 

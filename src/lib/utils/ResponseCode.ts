@@ -5,7 +5,8 @@ export const ResponseCode = {
     DUPLICATE_KEY_ERROR: 409,
     BAD_REQUEST: 400,
     AUTH_ERROR: 401,
-    NOT_FOUND_ERROR: 404
+    NOT_FOUND_ERROR: 404,
+	LOGOUT: 419
 }
 
 export const ResponseMessage = {

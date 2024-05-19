@@ -3,11 +3,6 @@ import { UserModelType } from "../lib/types/Models/User"
 import { CommonModelType } from "../lib/types/Models"
 
 const UserSchema = new Schema<UserModelType<CommonModelType & Document>>({
-	userName: {
-		type: String,
-		required: [true, "Username is required."],
-		unique: true
-	},
 	bio: {
 		type: String,
 		required: [true, "Bio is required."]
@@ -22,12 +17,12 @@ const UserSchema = new Schema<UserModelType<CommonModelType & Document>>({
 	},
 	email: {
 		type: String,
+		required: [true, "Email is required."],
 		unique: true
 	},
-	phoneNumber: {
+	password: {
 		type: String,
-		required: [true, "Phone Number is required."],
-		unique: true
+		required: [true, "Password is Required."]
 	},
 	image: {
 		type: String,

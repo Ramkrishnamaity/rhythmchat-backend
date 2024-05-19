@@ -1,11 +1,9 @@
 import express, { Application } from "express"
-import { configDotenv } from "dotenv"
-import { connectDB } from "./lib/utils/Connection"
+import connectDB from "./lib/utils/Connection"
 import rootRoute from "./routes/Index"
 import logger from "morgan"
 import path from "path"
 
-configDotenv()
 
 const app: Application = express()
 const port = process.env.PORT ?? 4051

@@ -1,11 +1,15 @@
 
 
-export type UserRegisterRequest = {
-    userName: string
+export type RegisterRequestType = {
     bio: string
     firstName: string
     lastName: string
-    email?: string
+    email: string
+    password: string
     image?: string
-    phoneNumber: string
+}
+
+export type LoginRequestType = {
+    email: string
+    password: string
 }

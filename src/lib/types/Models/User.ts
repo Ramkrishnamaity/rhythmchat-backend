@@ -1,11 +1,10 @@
 
 
 export type UserModelType<T> = T & {
-    userName: string
     bio: string
     firstName: string
     lastName: string
-    email?: string
+    email: string
+    password: string
     image: string
-    phoneNumber: string
 }
