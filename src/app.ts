@@ -1,5 +1,5 @@
 import express, { Application } from "express"
-import connectDB from "./lib/utils/Connection"
+import connection from "./lib/utils/Connection"
 import rootRoute from "./routes/Index"
 import logger from "morgan"
 import path from "path"
@@ -9,11 +9,11 @@ import cors from "cors"
 const app: Application = express()
 const port = process.env.PORT ?? 4051
 
-connectDB()
+connection()
 
 
 app.use(cors({
-	origin: "http://localhost:3000",
+	origin: "*",
 	credentials: true
 }))
 app.use(logger("dev"))

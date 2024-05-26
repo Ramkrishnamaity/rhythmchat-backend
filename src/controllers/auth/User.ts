@@ -2,19 +2,16 @@ import { Request, Response } from "express"
 import { Res } from "../../lib/types/Common"
 import { ResponseCode, ResponseMessage } from "../../lib/utils/ResponseCode"
 import { LoginRequestType, OtpRequestType, RegisterRequestType } from "../../lib/types/Requests/Auth/User"
-import { InputValidator, MailSender } from "../../lib/utils"
+import generateToken, { InputValidator, MailSender } from "../../lib/utils"
 import { UserLoginResponse, UserRegisterResponse } from "../../lib/types/Responses/Auth/User"
 import UserModel from "../../models/User"
 import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
 import { generate } from "otp-generator"
 import { redisCache } from "../../lib/utils/Connection"
 import OtpModel from "../../models/Otp"
 
 
-function generateToken(payload: { _id: string }) {
-	return jwt.sign(payload, process.env.JWT_SECRET ?? "gugdj648kfsaaf", { expiresIn: "1d" })
-}
+
 
 const login = async (req: Request<any, any, LoginRequestType>, res: Response<Res<UserLoginResponse>>): Promise<void> => {
 	try {
@@ -47,6 +44,7 @@ const login = async (req: Request<any, any, LoginRequestType>, res: Response<Res
 
 						// push in redis cache
 						await redisCache.set(`user:${user._id}:token`, token)
+						await redisCache.set(token, user._id)
 
 						res.status(ResponseCode.SUCCESS).json({
 							status: true,

@@ -3,6 +3,7 @@ import jwt, { JwtPayload } from "jsonwebtoken"
 import { Res } from "../types/Common"
 import { ResponseCode } from "./ResponseCode"
 import { redisCache } from "./Connection"
+import generateToken from "."
 
 export const middleware = async (req: Request, res: Response<Res>, next: NextFunction): Promise<void> => {
 	const authorization: string | undefined = req.headers.authorization
@@ -30,10 +31,22 @@ export const middleware = async (req: Request, res: Response<Res>, next: NextFun
 			}
 
 		} catch (error) {
-			res.status(ResponseCode.LOGOUT).json({
-				status: false,
-				message: "This Session is Expired, Please Logout."
-			})
+
+			const cacheUser = await redisCache.get(authorization)
+			if (!cacheUser) {
+				res.status(ResponseCode.LOGOUT).json({
+					status: false,
+					message: "This Session is Expired, Please Logout."
+				})
+			} else {
+				res.status(ResponseCode.AUTH_ERROR).json({
+					status: false,
+					message: "Your Token is Expired.",
+					data: {
+						token: generateToken({_id: cacheUser})
+					}
+				})
+			}
 		}
 	}
 }

@@ -5,6 +5,7 @@ const UserRouter: Router = Router()
 
 
 UserRouter.get("/profile", UserProfileController.getUserProfile)
+UserRouter.put("/profile", UserProfileController.updateProfile)
 
 
 export default UserRouter

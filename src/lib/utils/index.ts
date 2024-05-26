@@ -1,5 +1,6 @@
 import { Validator } from "node-input-validator"
 import { transporter } from "./Connection"
+import jwt from "jsonwebtoken"
 
 
 export const InputValidator = async (input: object, rules: object): Promise<void> => {
@@ -36,4 +37,8 @@ export const MailSender = async (email: string, title: string, body: string): Pr
 		console.log("Error in Mail Send: ", error)
         return false
     }
+}
+
+export default function generateToken(payload: { _id: string }) {
+	return jwt.sign(payload, process.env.JWT_SECRET ?? "", { expiresIn: "1d" })
 }
