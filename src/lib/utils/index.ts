@@ -1,6 +1,11 @@
 import { Validator } from "node-input-validator"
-import { transporter } from "./Connection"
 import jwt from "jsonwebtoken"
+import { Transporter, createTransport } from "nodemailer"
+
+
+const host = process.env.MAIL_HOST ?? ""
+const user = process.env.MAIL_USER ?? ""
+const pass = process.env.MAIL_PASS ?? ""
 
 
 export const InputValidator = async (input: object, rules: object): Promise<void> => {
@@ -26,6 +31,16 @@ export const InputValidator = async (input: object, rules: object): Promise<void
 
 export const MailSender = async (email: string, title: string, body: string): Promise<boolean> => {
 	try{
+		const configOptions = {
+			host: host,
+			port: 465,
+			secure: true,
+			auth: {
+				user: user,
+				pass: pass
+			}
+		}
+		const transporter: Transporter = createTransport(configOptions)
         await transporter.sendMail({
             from: "RhythmChat ORG.",
             to: `${email}`,

@@ -2,10 +2,9 @@ import mongoose, { Document, Schema } from "mongoose"
 import { UserModelType } from "../lib/types/Models/User"
 import { CommonModelType } from "../lib/types/Models"
 
-const UserSchema = new Schema<UserModelType<CommonModelType & Document>>({
+const UserSchema = new Schema<UserModelType<CommonModelType & Document["_id"]>>({
 	about: {
-		type: String,
-		required: [true, "About is Required."]
+		type: String
 	},
 	firstName: {
 		type: String,
@@ -43,6 +42,6 @@ const UserSchema = new Schema<UserModelType<CommonModelType & Document>>({
 })
 
 
-const UserModel = mongoose.model<UserModelType<CommonModelType & Document>>("User", UserSchema)
+const UserModel = mongoose.model<UserModelType<CommonModelType & Document["_id"]>>("User", UserSchema)
 
 export default UserModel

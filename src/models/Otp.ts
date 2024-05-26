@@ -3,7 +3,7 @@ import { OtpModelType } from "../lib/types/Models/Otp";
 
 
 
-const OtpSchema = new Schema<OtpModelType<Document>>({
+const OtpSchema = new Schema<OtpModelType<Document["_id"]>>({
     email: {
         type: String,
         required: true
@@ -19,7 +19,7 @@ const OtpSchema = new Schema<OtpModelType<Document>>({
     }
 })
 
-const OtpModel = model<OtpModelType<Document>>("otp", OtpSchema)
+const OtpModel = model<OtpModelType<Document["_id"]>>("otp", OtpSchema)
 
 export default OtpModel
 

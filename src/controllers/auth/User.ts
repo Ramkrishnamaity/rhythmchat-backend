@@ -82,40 +82,49 @@ const register = (req: Request<any, any, RegisterRequestType>, res: Response<Res
 		InputValidator(req.body, {
 			email: "required",
 			password: "required",
-			about: "required",
 			otp: "required",
 			firstName: "required",
 			lastName: "required"
 		})
 			.then(async () => {
 
-				const otpInDoc = await OtpModel.findOne({ email: req.body.email })
-				if (!otpInDoc || (otpInDoc.otp !== req.body.otp)) {
-					res.status(ResponseCode.NOT_FOUND_ERROR).json({
+				const isExist = await UserModel.findOne({ email: req.body.email })
+				if (isExist) {
+
+					res.status(ResponseCode.BAD_REQUEST).json({
 						status: false,
-						message: "Invalid Otp."
+						message: "User Already Registered."
 					})
+
 				} else {
-					const salt = bcrypt.genSaltSync(10)
-					const hashedPassword = bcrypt.hashSync(req.body.password, salt)
-
-					const user = await UserModel.create({
-						...req.body,
-						password: hashedPassword
-					})
-
-					const token = generateToken({ _id: user._id })
-
-					// push in redis cache
-					await redisCache.set(`user:${user._id}:token`, token)
-
-					res.status(ResponseCode.SUCCESS).json({
-						status: true,
-						message: "User Registered Successfully",
-						data: {
-							token
-						}
-					})
+					const otpInDoc = await OtpModel.findOne({ email: req.body.email })
+					if (!otpInDoc || (otpInDoc.otp !== req.body.otp)) {
+						res.status(ResponseCode.NOT_FOUND_ERROR).json({
+							status: false,
+							message: "Invalid Otp."
+						})
+					} else {
+						const salt = bcrypt.genSaltSync(10)
+						const hashedPassword = bcrypt.hashSync(req.body.password, salt)
+	
+						const user = await UserModel.create({
+							...req.body,
+							password: hashedPassword
+						})
+	
+						const token = generateToken({ _id: user._id })
+	
+						// push in redis cache
+						await redisCache.set(`user:${user._id}:token`, token)
+	
+						res.status(ResponseCode.SUCCESS).json({
+							status: true,
+							message: "User Registered Successfully",
+							data: {
+								token
+							}
+						})
+					}
 				}
 
 			})

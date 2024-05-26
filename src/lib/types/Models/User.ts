@@ -1,7 +1,7 @@
 
 
 export type UserModelType<T> = T & {
-    about: string
+    about?: string
     firstName: string
     lastName: string
     email: string
