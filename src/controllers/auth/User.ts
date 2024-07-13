@@ -3,7 +3,7 @@ import { Res } from "../../lib/types/Common"
 import { ResponseCode, ResponseMessage } from "../../lib/utils/ResponseCode"
 import { LoginRequestType, OtpRequestType, RegisterRequestType } from "../../lib/types/Requests/Auth/User"
 import generateToken, { InputValidator, MailSender } from "../../lib/utils"
-import { UserLoginResponse, UserRegisterResponse } from "../../lib/types/Responses/Auth/User"
+import { UserLoginResponse } from "../../lib/types/Responses/Auth/User"
 import UserModel from "../../models/User"
 import bcrypt from "bcrypt"
 import { generate } from "otp-generator"
@@ -22,7 +22,15 @@ const login = async (req: Request<any, any, LoginRequestType>, res: Response<Res
 		})
 			.then(async () => {
 
-				const user = await UserModel.findOne({ email: req.body.email })
+				const user = await UserModel.findOne(
+					{ email: req.body.email },
+					{
+						// password: 0,
+						createdOn: 0,
+						isDeleted: 0,
+						__v: 0
+					}
+				)
 
 				if (!user) {
 					res.status(ResponseCode.BAD_REQUEST).json({
@@ -46,11 +54,14 @@ const login = async (req: Request<any, any, LoginRequestType>, res: Response<Res
 						await redisCache.set(`user:${user._id}:token`, token)
 						await redisCache.set(token, user._id)
 
+						user.password = undefined
+
 						res.status(ResponseCode.SUCCESS).json({
 							status: true,
 							message: "User Logged in Successfully",
 							data: {
-								token
+								token,
+								profile: user
 							}
 						})
 
@@ -76,7 +87,7 @@ const login = async (req: Request<any, any, LoginRequestType>, res: Response<Res
 	}
 }
 
-const register = (req: Request<any, any, RegisterRequestType>, res: Response<Res<UserRegisterResponse>>): void => {
+const register = (req: Request<any, any, RegisterRequestType>, res: Response<Res>): void => {
 	try {
 
 		InputValidator(req.body, {
@@ -106,23 +117,15 @@ const register = (req: Request<any, any, RegisterRequestType>, res: Response<Res
 					} else {
 						const salt = bcrypt.genSaltSync(10)
 						const hashedPassword = bcrypt.hashSync(req.body.password, salt)
-	
+
 						const user = await UserModel.create({
 							...req.body,
 							password: hashedPassword
 						})
-	
-						const token = generateToken({ _id: user._id })
-	
-						// push in redis cache
-						await redisCache.set(`user:${user._id}:token`, token)
-	
+
 						res.status(ResponseCode.SUCCESS).json({
 							status: true,
-							message: "User Registered Successfully",
-							data: {
-								token
-							}
+							message: "User Registered Successfully"
 						})
 					}
 				}

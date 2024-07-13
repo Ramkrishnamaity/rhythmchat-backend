@@ -13,13 +13,13 @@ connection()
 
 
 app.use(cors({
-	origin: "*",
+	origin: "http://localhost:3000",
 	credentials: true
 }))
 app.use(logger("dev"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use('/api/v1/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use("/api/v1/uploads", express.static(path.join(__dirname, "../uploads")))
 app.use("/api/v1", rootRoute)
 
 app.listen(port, () => {

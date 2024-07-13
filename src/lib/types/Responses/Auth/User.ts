@@ -1,7 +1,9 @@
+import { ProfileResponceType } from "../User"
+
 export type UserLoginResponse = {
-    token: string
+    token: string,
+    profile: ProfileResponceType
 }
 
-export type UserRegisterResponse = UserLoginResponse
 
 

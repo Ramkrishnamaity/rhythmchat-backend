@@ -41,17 +41,17 @@ export const MailSender = async (email: string, title: string, body: string): Pr
 			}
 		}
 		const transporter: Transporter = createTransport(configOptions)
-        await transporter.sendMail({
-            from: "RhythmChat ORG.",
-            to: `${email}`,
-            subject: `${title}`,
-            html: `${body}`     
-        })
+		await transporter.sendMail({
+			from: "RhythmChat ORG.",
+			to: `${email}`,
+			subject: `${title}`,
+			html: `${body}`     
+		})
 		return true
-    } catch(error){
+	} catch(error){
 		console.log("Error in Mail Send: ", error)
-        return false
-    }
+		return false
+	}
 }
 
 export default function generateToken(payload: { _id: string }) {
