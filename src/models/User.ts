@@ -4,7 +4,8 @@ import { CommonModelType } from "../lib/types/Models"
 
 const UserSchema = new Schema<UserModelType<CommonModelType & Document["_id"]>>({
 	about: {
-		type: String
+		type: String,
+		default: "Hi there."
 	},
 	firstName: {
 		type: String,
