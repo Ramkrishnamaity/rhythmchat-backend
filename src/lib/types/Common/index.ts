@@ -7,8 +7,7 @@ export type Res<T = Record<string, any>> = {
 }
 
 export type ReqWithAuth<T = Record<string, any>> = T & {
-    _id: string,
-    email: string
+    _id: string
 }
 
 

@@ -1,10 +1,8 @@
 
 
-export type UserModelType<T> = T & {
+export type UpdateProfileRequestType = {
     about: string
     firstName: string
     lastName: string
-    email: string
-    password: string
     image: string
 }

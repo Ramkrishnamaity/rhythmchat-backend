@@ -1,10 +1,9 @@
 export type ProfileResponceType = {
-    userName: string
-    bio?: string
-    firstName?: string
-    lastName?: string
-    email?: string
+    about: string
+    firstName: string
+    lastName: string
+    email: string
+    password: string
     image: string
-    phoneNumber?: string
-    updatedOn?: Date
+    updatedOn: Date
 }

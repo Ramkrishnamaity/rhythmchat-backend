@@ -1,15 +1,25 @@
 import mongoose from "mongoose"
-import { configDotenv } from "dotenv"
-configDotenv()
+import { Redis } from "ioredis"
 
-export const connectDB = (): void => {
-	const mongoURI: string = process.env.MONGODB_URI ?? "mongodb://localhost:27017/rhythmchat"
+const mongoURL = process.env.MONGODB_URL ?? ""
+const redisURL = process.env.REDIS_URL ?? ""
+let redisCache: Redis
 
-	mongoose.connect(mongoURI)
-		.then(() => {
-			console.log("MongoDB connected")
-		})
-		.catch((error) => {
-			console.error("MongoDB connection error:", error)
-		})
+
+export default async function connection() {
+	try {
+		// mongodb connection
+		await mongoose.connect(mongoURL)
+		console.log("MongoDB connected.")
+
+		// redis connection
+		redisCache = new Redis(redisURL)
+		console.log("Redis Connected.")
+
+	} catch (error) {
+		console.error("Connection error:", error)
+		process.exit(1)
+	}
 }
+
+export { redisCache }

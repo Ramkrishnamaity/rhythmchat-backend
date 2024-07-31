@@ -6,5 +6,5 @@
     "execMap": {
         "ts": "swc-node"
     },
-    "exec": "ts-node ./src/app.ts"
+    "exec": "dotenv -e .env.development ts-node ./src/app.ts"
 }

@@ -1,7 +1,9 @@
+import { ProfileResponceType } from "../User"
+
 export type UserLoginResponse = {
-    _id: string
-    isNew: boolean,
-    token: string
+    token: string,
+    profile: ProfileResponceType
 }
+
 
 
