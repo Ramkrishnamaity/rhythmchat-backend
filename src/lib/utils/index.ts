@@ -29,8 +29,11 @@ export const InputValidator = async (input: object, rules: object): Promise<void
 	})
 }
 
+export const fileSupportedFormat = ['image', 'video', 'application']
+export const storySupportedFormat = ['image', 'video']
+
 export const MailSender = async (email: string, title: string, body: string): Promise<boolean> => {
-	try{
+	try {
 		const configOptions = {
 			host: host,
 			port: 465,
@@ -45,15 +48,15 @@ export const MailSender = async (email: string, title: string, body: string): Pr
 			from: "RhythmChat ORG.",
 			to: `${email}`,
 			subject: `${title}`,
-			html: `${body}`     
+			html: `${body}`
 		})
 		return true
-	} catch(error){
+	} catch (error) {
 		console.log("Error in Mail Send: ", error)
 		return false
 	}
 }
 
-export default function generateToken(payload: { _id: string }) {
-	return jwt.sign(payload, process.env.JWT_SECRET ?? "", { expiresIn: "1d" })
+export default function generateToken(payload: { _id: string }, expiresIn: string = '1d') {
+	return jwt.sign(payload, process.env.JWT_SECRET ?? "", { expiresIn })
 }
