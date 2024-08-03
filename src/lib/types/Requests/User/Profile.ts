@@ -6,3 +6,22 @@ export type UpdateProfileRequestType = {
     lastName: string
     image: string
 }
+
+export type UpdatePasswordRequestType = {
+    oldPassword: string
+    newPasswprd: string
+}
+
+export type ChangePasswordRequestType = {
+    password: string
+    confirmPassword: string
+}
+
+export type ResetPasswordRequestType = {
+    email: string
+}
+
+export type ResetPasswordParamsType = {
+    id: string
+    token: string
+}

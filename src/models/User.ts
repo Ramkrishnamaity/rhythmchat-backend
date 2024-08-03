@@ -26,7 +26,7 @@ const UserSchema = new Schema<UserModelType<CommonModelType & Document["_id"]>>(
 	},
 	image: {
 		type: String,
-		default: "http://127.0.0.1:4050/api/v1/uploads/profile.png"
+		default: "https://savari.blr1.digitaloceanspaces.com/665337ffd8c9fcafc278765f/image/1722662350635.png"
 	},
 	createdOn: {
 		type: Date,
