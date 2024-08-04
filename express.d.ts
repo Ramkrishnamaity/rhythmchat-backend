@@ -1,4 +1,4 @@
-import { ReqWithAuth } from "./src/lib/DataTypes/Common"
+import { ReqWithAuth } from "./src/lib/types/Common"
 
 // Augment the Request interface to include the custom property
 declare module "express" {

@@ -96,14 +96,15 @@ const updatePassword = (req: Request<any, any, UpdatePasswordRequestType>, res: 
 	try {
 		InputValidator(req.body, {
 			oldPassword: 'required',
-			newPasswprd: 'required'
+			newPassword: 'required'
 		}).then(async () => {
+			console.log(req.body)
 
 			const user = await UserModel.findById(req.User?._id)
-			if (user && bcrypt.compareSync(req.body.oldPassword, user.password)) {
+			if (bcrypt.compareSync(req.body.oldPassword, user.password)) {
 
 				const salt = bcrypt.genSaltSync(10)
-				const hashedPassword = bcrypt.hashSync(req.body.newPasswprd, salt)
+				const hashedPassword = bcrypt.hashSync(req.body.newPassword, salt)
 
 				await UserModel.findByIdAndUpdate(
 					req.User?._id,
@@ -121,7 +122,7 @@ const updatePassword = (req: Request<any, any, UpdatePasswordRequestType>, res: 
 				})
 			} else {
 				res.status(ResponseCode.SUCCESS).json({
-					status: true,
+					status: false,
 					message: "Invalid Password."
 				})
 			}
@@ -200,8 +201,9 @@ const resetPasswordRequest = (req: Request<any, any, ResetPasswordRequestType>, 
 				const token = generateToken({ _id: user._id }, '1d')
 
 				const url = `${process.env.SERVER_BASE_URL}/api/v1/user/reset-password/${user._id}/${token}`
+				console.log(url)
 
-				await MailSender(user.email, 'Reset Password', `Reset your password from this link : ${url}`)
+				// await MailSender(user.email, 'Reset Password', `Reset your password from this link : ${url}`)
 
 				res.status(ResponseCode.SUCCESS).json({
 					status: true,

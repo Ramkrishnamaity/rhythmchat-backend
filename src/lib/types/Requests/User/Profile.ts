@@ -9,7 +9,7 @@ export type UpdateProfileRequestType = {
 
 export type UpdatePasswordRequestType = {
     oldPassword: string
-    newPasswprd: string
+    newPassword: string
 }
 
 export type ChangePasswordRequestType = {
